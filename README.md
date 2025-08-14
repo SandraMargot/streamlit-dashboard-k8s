@@ -16,8 +16,47 @@ It simulates a production-style setup — with containerized application, declar
 - Deployment defined via Kubernetes YAML manifests
 - NodePort service for external access to the dashboard
 - Interactive dashboard with KPI metrics, chart, and user-controlled parameters
-- Runs entirely inside WSL2 for a production-like workflow# streamlit-dashboard-k8s
-Deploying a dashboard app to Kubernetes
+- Runs entirely inside WSL2 for a production-like workflow
+
+## Quickstart
+Clone this repository and deploy the app on your local Minikube cluster:
+
+\`\`\`bash
+git clone git@github.com:SandraMargot/streamlit-dashboard-k8s.git
+cd streamlit-dashboard-k8s
+kubectl apply -f k8s/
+minikube service dashboard-service
+\`\`\`
+
+Make sure Minikube is running in WSL2 with the Docker driver enabled.
+
+## Architecture
+
+\`\`\`mermaid
+flowchart LR
+  subgraph WIN[Windows]
+    BROWSER[Web Browser]
+  end
+
+  subgraph WSL[WSL2 (Ubuntu)]
+    subgraph MK[Minikube Cluster]
+      subgraph NS[default namespace]
+        SVC[NodePort Service<br/>dashboard-service:8501]
+        subgraph DEPLOY[Deployment<br/>dashboard-deployment]
+          POD[Pod]
+          CONTAINER[Container<br/>streamlit-dashboard:v0.3]
+          APP[Streamlit App]
+        end
+      end
+    end
+  end
+
+  BROWSER <-- HTTP --> SVC
+  SVC --> POD
+  POD --> CONTAINER --> APP
+\`\`\`
+
+This diagram shows the local browser on Windows reaching the Kubernetes **NodePort Service** in Minikube (running inside **WSL2**), which routes traffic to the **Pod** running the **Streamlit** container.
 
 ## Live Demo Screenshot
 
