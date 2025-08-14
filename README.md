@@ -61,3 +61,11 @@ This diagram shows the local browser on Windows reaching the Kubernetes **NodePo
 ## Live Demo Screenshot
 
 ![Dashboard Screenshot](screenshot.png)
+
+## Future Improvements
+- Add CI/CD pipeline (GitHub Actions) to automate image build and Kubernetes deployment.
+- Use a Helm chart for easier configuration management and deployment.
+- Add authentication to restrict access to the dashboard.
+- Expand dashboard with real-world data sources.
+- Integrate persistent storage for long-term data retention.
+- Implement resource requests/limits and horizontal pod autoscaling.
