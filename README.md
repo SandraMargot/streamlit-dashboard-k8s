@@ -32,31 +32,11 @@ Make sure Minikube is running in WSL2 with the Docker driver enabled.
 
 ## Architecture
 
-```mermaid
-flowchart LR
-  subgraph WIN[Windows]
-    BROWSER[Web Browser]
-  end
-
-  subgraph WSL[WSL2 (Ubuntu)]
-    subgraph MK[Minikube Cluster]
-      subgraph NS[default namespace]
-        SVC[NodePort Service<br/>dashboard-service:8501]
-        subgraph DEPLOY[Deployment<br/>dashboard-deployment]
-          POD[Pod]
-          CONTAINER[Container<br/>streamlit-dashboard:v0.3]
-          APP[Streamlit App]
-        end
-      end
-    end
-  end
-
-  BROWSER <-- HTTP --> SVC
-  SVC --> POD
-  POD --> CONTAINER --> APP
-```
-
-This diagram shows the local browser on Windows reaching the Kubernetes **NodePort Service** in Minikube (running inside **WSL2**), which routes traffic to the **Pod** running the **Streamlit** container.
+**How traffic flows**  
+1. The local browser on Windows calls the NodePort URL (obtained via `minikube service dashboard-service`).  
+2. The request reaches the Kubernetes **NodePort Service** in Minikube (running inside **WSL2**).  
+3. The Service routes the request to the **Pod** managed by the Deployment.  
+4. The Pod’s container runs Streamlit and serves the dashboard on port 8501.
 
 ## Live Demo Screenshot
 
