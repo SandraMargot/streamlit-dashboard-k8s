@@ -21,12 +21,12 @@ It simulates a production-style setup — with containerized application, declar
 ## Quickstart
 Clone this repository and deploy the app on your local Minikube cluster:
 
-\`\`\`bash
+```bash
 git clone git@github.com:SandraMargot/streamlit-dashboard-k8s.git
 cd streamlit-dashboard-k8s
 kubectl apply -f k8s/
 minikube service dashboard-service
-\`\`\`
+```
 
 Make sure Minikube is running in WSL2 with the Docker driver enabled.
 
@@ -34,28 +34,27 @@ Make sure Minikube is running in WSL2 with the Docker driver enabled.
 
 ```mermaid
 flowchart LR
-    subgraph WIN[Windows]
-        BROWSER[Web Browser]
-    end
+  subgraph WIN[Windows]
+    BROWSER[Web Browser]
+  end
 
-    subgraph WSL[WSL2 (Ubuntu)]
-        subgraph MK[Minikube Cluster]
-            subgraph NS[default namespace]
-                SVC[NodePort Service\n dashboard-service:8501]
-                subgraph DEPLOY[Deployment\n dashboard-deployment]
-                    POD[Pod]
-                    CONTAINER[Container\n streamlit-dashboard:v0.3]
-                    APP[Streamlit App]
-                end
-            end
+  subgraph WSL[WSL2 (Ubuntu)]
+    subgraph MK[Minikube Cluster]
+      subgraph NS[default namespace]
+        SVC[NodePort Service<br/>dashboard-service:8501]
+        subgraph DEPLOY[Deployment<br/>dashboard-deployment]
+          POD[Pod]
+          CONTAINER[Container<br/>streamlit-dashboard:v0.3]
+          APP[Streamlit App]
         end
+      end
     end
+  end
 
-    BROWSER <-- HTTP --> SVC
-    SVC --> POD
-    POD --> CONTAINER --> APP
-```markdown
-This diagram shows the local browser on Windows reaching the Kubernetes **NodePort Service** in Minikube (running inside **WSL2**), which routes traffic to the **Pod** running the **Streamlit** container.
+  BROWSER <-- HTTP --> SVC
+  SVC --> POD
+  POD --> CONTAINER --> APP
+```
 
 This diagram shows the local browser on Windows reaching the Kubernetes **NodePort Service** in Minikube (running inside **WSL2**), which routes traffic to the **Pod** running the **Streamlit** container.
 
